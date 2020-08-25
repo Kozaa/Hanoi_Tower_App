@@ -1,17 +1,35 @@
 <template>
   <div id="app">
+    <div class='slotsWrapper'>
+        <RingSlot>
 
-  <div class='base' />
+        </RingSlot>
+        <RingSlot v-bind:rings="rings">
+
+        </RingSlot>
+        <RingSlot v-bind:rings="rings">
+
+        </RingSlot>
+
+    </div>
+    <div class='base' />
   </div>
 </template>
 
 <script>
+import { rings } from './data.js';
+import RingSlot from './components/RingSlot.vue';
 
 
 export default {
   name: 'App',
   components: {
-
+    RingSlot,
+  },
+  data() {
+    return {
+      rings
+    }
   }
 }
 </script>
@@ -32,18 +50,30 @@ export default {
     background-color: blue;
   }
 
+  .slotsWrapper {
+    width: 90%;
+    height: 60%; 
+
+    position: fixed;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    justify-content: space-around;
+
+  }
+
   .base {
-    width: 70%;
+    width: 90%;
     height: 50px;
 
     position: fixed;
-    top: 70%;
+    bottom: 10%;
     left: 50%;
     transform: translateX(-50%);
 
     background-color: brown;
     border-radius: 10px;
-
-
   }
 </style>
