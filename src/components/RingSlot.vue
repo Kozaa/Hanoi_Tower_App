@@ -1,31 +1,33 @@
 <template>
     <div class='ringslot'>
-        <div class='click' />
-        <Ring v-for='(ring, i) in rings' :key='ring.id' v-bind:style="{'background-color': rings[i].color, width: rings[i].width}"/>
+        <Ring 
+        v-for='(ring) in rings' 
+        :key='ring.id' 
+        :id='ring.id' 
+        :style="{'background-color': ring.color, width: ring.width}"
+        :class='{selected: ring.selected}'
+        />
     </div>
 </template>
 
 <script>
 import Ring from './Ring.vue';
 
+
 export default {
     name: 'RingSlot',
     components: {
         Ring,
     },
-    data() {
-        return {
-        currentRingsOnSlot: [],
-        }
-    },
+    
     props: {
         rings: {
-            default: [],
             required: false,
         }
-    }
-
+    },
 }
+
+
 </script>
 
 <style scoped>
@@ -46,11 +48,5 @@ export default {
         position: relative;
     }
 
-    .click {
-        width: 30vw;
-        height: 100%;
-
-        position: absolute;
-    }
 
 </style>
