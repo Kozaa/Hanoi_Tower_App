@@ -13,11 +13,12 @@ export default {
     .ring {
         height: 30px;
         border-radius: 15px;
+        transition: transform .15s ease-in;
     }
 
     .selected {
-        justify-self: flex-start;
-        transform: translateY(-200%);
-        transition: transform .15s ease-in;
+
+        transform: translateY(-30vh);
     }
+
 </style>

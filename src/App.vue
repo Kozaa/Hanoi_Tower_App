@@ -28,6 +28,8 @@ export default {
   },
   data() {
     return {
+      selected: null,
+      previousClick: 'slot2',
       slot0: [],
       slot1: [],
       slot2: [
@@ -80,24 +82,57 @@ export default {
         selected: false,
       },
 
-],
-      selected: null,
-    }
+  ]
+}
   },
     methods: {
         handleSlotClick: function(ev) {
           
-          let slotClicked = `slot${ev.target.id}`
+
+        let slotClicked = `slot${ev.target.id}`
+
+ 
 
 
-            if(this.slelected) {
-                console.log("already sleted: " + this.slelected)
+              
+            if(this.selected) {
+              if(this[slotClicked].includes(this.selected)) {
+                this.selected = null;
+  
+                  this[slotClicked][0].selected = false;
+                  this.previousClick = slotClicked;
+                  
+              }   else {
+                    if(this[slotClicked][0]) {
+                      if(this[slotClicked][0].id > this.selected.id) {
+
+                        this[slotClicked].unshift(this.selected)
+                        this[slotClicked][0].selected = false
+                        this[this.previousClick].shift()
+                        this.selected = null
+                        this.previousClick = slotClicked;
+
+                      } else alert('sorry, illegal move')
+                  } else {
+                        this[slotClicked].unshift(this.selected)
+                        console.log(this[slotClicked])
+                        this[slotClicked][0].selected = false
+                        this[this.previousClick].shift()
+                        this.selected = null
+                        this.previousClick = slotClicked;
+                  }
+                    }
+
             } 
             else {
-                this.slelected = this[slotClicked][0];
-                console.log('new selected: ' + this.slelected);
+              if(this[slotClicked].length === 0) return
+                this.selected = this[slotClicked][0];
+
                 this[slotClicked][0].selected = true;
+                this.previousClick = slotClicked;
             }
+
+                             console.log(slotClicked, this.selected)
         }
     },
 }
