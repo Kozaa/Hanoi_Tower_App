@@ -1,9 +1,10 @@
 <template>
-  <div id="app">
-    <InfoDisplay />
+  <div id="app" >
+    <StartForm @nameChange='onNameChange' @gameStart='onGameStart'/>
+    <InfoDisplay :name='name' :moves='moves' :timer='timer'/>
     <div class='slotsWrapper'>
         <RingSlot :rings='slot0'/>
-
+        
         <RingSlot :rings='slot1'/>
 
         <RingSlot :rings='slot2'/>
@@ -21,69 +22,73 @@
 <script>
 import RingSlot from './components/RingSlot.vue';
 import InfoDisplay from './components/InfoDisplay.vue';
+import StartForm from './components/StartForm.vue';
 
 export default {
   name: 'App',
   components: {
     RingSlot,
     InfoDisplay,
+    StartForm,
   },
   data() {
     return {
+      name: '',
+      timer: '20:22',
+      moves: 0,
       selected: null,
       previousClick: 'slot2',
       slot0: [],
       slot1: [],
       slot2: [
-      {
-        id: 0,
-        width: '150%',
-        color: 'red',
-        selected: false,
-      },
-      {
-        id: 1,
-        width: '300%',
-        color: 'green',
-        selected: false,
-      },
-      {
-        id: 2,
-        width: '450%',
-        color: 'blue',
-        selected: false,
-      },
-      {
-        id: 3,
-        width: '600%',
-        color: 'orange',
-        selected: false,
-      },
-      {
-        id: 4,
-        width: '750%',
-        color: 'magenta',
-        selected: false,
-      },
-      {
-        id: 5,
-        width: '900%',
-        color: 'cyan',
-        selected: false,
-      },
-      {
-        id: 6,
-        width: '1050%',
-        color: 'black',
-        selected: false,
-      },
-      {
-        id: 7,
-        width: '1200%',
-        color: 'pink',
-        selected: false,
-      },
-
+          {
+            id: 0,
+            width: '150%',
+            color: 'red',
+            selected: false,
+          },
+          {
+            id: 1,
+            width: '300%',
+            color: 'green',
+            selected: false,
+          },
+          {
+            id: 2,
+            width: '450%',
+            color: 'blue',
+            selected: false,
+          },
+          {
+            id: 3,
+            width: '600%',
+            color: 'orange',
+            selected: false,
+          },
+          {
+            id: 4,
+            width: '750%',
+            color: 'magenta',
+            selected: false,
+          },
+          {
+            id: 5,
+            width: '900%',
+            color: 'cyan',
+            selected: false,
+          },
+          {
+            id: 6,
+            width: '1050%',
+            color: 'black',
+            selected: false,
+          },
+          {
+            id: 7,
+            width: '1200%',
+            color: 'pink',
+            selected: false,
+          },
   ]
 }
   },
@@ -125,6 +130,13 @@ export default {
           this.selected = null;
           this.previousClick = slotClicked; 
     },
+      onNameChange: function(newValue) {
+        this.name = newValue;
+      },
+      onGameStart: function(started) {
+        console.log(started);
+        setInterval()
+      }
   },
 }
 </script>
@@ -140,8 +152,7 @@ export default {
     padding: 0;
     background-color: aliceblue;
     
-    font-size: calc(1vw + 1vh + 2px);
-
+    font-size: calc(1vw + 1vh + 2px); 
   }
 
   body, button, input {
@@ -149,6 +160,26 @@ export default {
     font-weight: 400;
     color: rgb(199, 12, 74);
   }
+
+  #app {
+    width: 100vw;
+    height: 100vh;
+
+  }
+
+  /* #app::after {
+    content: '';
+    width: 100vw;
+    height: 100vh;
+
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: .9;
+    background-color: black;
+  } */
+
 
   .slotsWrapper {
     width: 90%;
@@ -189,5 +220,12 @@ export default {
   .handleClickArea {
     width: 30vw;
     height: 100%;
+  }
+
+
+  @media screen and (max-width: 768px) {
+    body {
+      font-size: calc(1vw + 1vh + 8px);
     }
+  }
 </style>

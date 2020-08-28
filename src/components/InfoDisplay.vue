@@ -2,12 +2,12 @@
     <div class='displayWrapper'>
         <div>
             <div>
-                Name <br>
-                Moves: 34 <br>
-                Time: 12:32
+                Name: {{ name }} <br>
+                Moves: {{ moves.toString() }} <br>
+                Time: {{ timer }}
             </div>
         </div>
-        <Button type='Rules' />
+        <Button type='Rules' id='2'/>
     </div>
 </template>
 
@@ -18,6 +18,17 @@ export default {
     name: 'InfoDisplay',
     components: {
         Button,
+    },
+    props: {
+        name: {
+            required: false,
+        },
+        moves: {
+            required: false,
+        },
+        timer: {
+            required: false,
+        },
     }
 
 }
@@ -31,7 +42,7 @@ export default {
         position: fixed;
         padding: 0 50px;
     
-
+        z-index: 1;
         display: flex;
         justify-content: space-between;
         align-items: center;
