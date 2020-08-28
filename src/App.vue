@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <InfoDisplay />
     <div class='slotsWrapper'>
         <RingSlot :rings='slot0'/>
 
@@ -19,12 +20,13 @@
 
 <script>
 import RingSlot from './components/RingSlot.vue';
-
+import InfoDisplay from './components/InfoDisplay.vue';
 
 export default {
   name: 'App',
   components: {
     RingSlot,
+    InfoDisplay,
   },
   data() {
     return {
@@ -87,18 +89,13 @@ export default {
   },
     methods: {
         handleSlotClick: function(ev) {
-          
 
         let slotClicked = `slot${ev.target.id}`
 
- 
-
-
-              
             if(this.selected) {
               if(this[slotClicked].includes(this.selected)) {
-                this.selected = null;
-  
+
+                  this.selected = null;
                   this[slotClicked][0].selected = false;
                   this.previousClick = slotClicked;
                   
@@ -106,35 +103,29 @@ export default {
                     if(this[slotClicked][0]) {
                       if(this[slotClicked][0].id > this.selected.id) {
 
-                        this[slotClicked].unshift(this.selected)
-                        this[slotClicked][0].selected = false
-                        this[this.previousClick].shift()
-                        this.selected = null
-                        this.previousClick = slotClicked;
+                        this.handleRingTransfer(slotClicked);
 
-                      } else alert('sorry, illegal move')
-                  } else {
-                        this[slotClicked].unshift(this.selected)
-                        console.log(this[slotClicked])
-                        this[slotClicked][0].selected = false
-                        this[this.previousClick].shift()
-                        this.selected = null
-                        this.previousClick = slotClicked;
-                  }
-                    }
-
+                      } else alert('sorry, illegal move');
+                  } else this.handleRingTransfer(slotClicked);   
+              }
             } 
             else {
-              if(this[slotClicked].length === 0) return
-                this.selected = this[slotClicked][0];
 
+              if(this[slotClicked].length === 0) return
+
+                this.selected = this[slotClicked][0];
                 this[slotClicked][0].selected = true;
                 this.previousClick = slotClicked;
             }
-
-                             console.log(slotClicked, this.selected)
-        }
+        },
+        handleRingTransfer(slotClicked) {
+          this[slotClicked].unshift(this.selected);
+          this[slotClicked][0].selected = false;
+          this[this.previousClick].shift();
+          this.selected = null;
+          this.previousClick = slotClicked; 
     },
+  },
 }
 </script>
 
@@ -148,10 +139,15 @@ export default {
     margin: 0;
     padding: 0;
     background-color: aliceblue;
+    
+    font-size: calc(1vw + 1vh + 2px);
+
   }
 
-  #app {
-    background-color: blue;
+  body, button, input {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    color: rgb(199, 12, 74);
   }
 
   .slotsWrapper {
@@ -179,6 +175,7 @@ export default {
 
     background-color: brown;
     border-radius: 10px;
+
   }
 
   .handleClickWrapper {
