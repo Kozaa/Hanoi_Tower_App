@@ -4,20 +4,28 @@
             <div>
                 Name: {{ name }} <br>
                 Moves: {{ moves.toString() }} <br>
-                Time: {{ timer }}
+                Time: {{ time[1] }}
             </div>
         </div>
-        <Button type='Rules' id='2'/>
+        <Button type='Rules' id='2' @click.native='showRules = !showRules'/>
+        <Rules v-show='showRules' @click.native='showRules = !showRules'/>
     </div>
 </template>
 
 <script>
 import Button from './Button.vue';
+import Rules from './Rules.vue';
 
 export default {
     name: 'InfoDisplay',
     components: {
         Button,
+        Rules,
+    },
+    data() {
+        return {
+            showRules: false,
+        }
     },
     props: {
         name: {
@@ -26,11 +34,10 @@ export default {
         moves: {
             required: false,
         },
-        timer: {
+        time: {
             required: false,
         },
-    }
-
+    },
 }
 </script>
 
@@ -42,7 +49,7 @@ export default {
         position: fixed;
         padding: 0 50px;
     
-        z-index: 1;
+        z-index: 2;
         display: flex;
         justify-content: space-between;
         align-items: center;

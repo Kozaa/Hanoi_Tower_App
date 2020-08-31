@@ -1,7 +1,11 @@
 <template>
   <div id="app" >
-    <StartForm @nameChange='onNameChange' @gameStart='onGameStart'/>
-    <InfoDisplay :name='name' :moves='moves' :timer='timer'/>
+    <transition name='fade'>
+      <div class='background' v-show='!started'/>
+    </transition>
+    <StartForm @nameChange='onNameChange' :name='name' @gameStart='onGameStart'/>
+    <InfoDisplay :name='name' :moves='moves' :time='time'/>
+    <WinScreen />
     <div class='slotsWrapper'>
         <RingSlot :rings='slot0'/>
         
@@ -20,9 +24,14 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import RingSlot from './components/RingSlot.vue';
 import InfoDisplay from './components/InfoDisplay.vue';
 import StartForm from './components/StartForm.vue';
+import WinScreen from './components/WinScreen.vue';
+import VueConfetti from 'vue-confetti';
+
+Vue.use(VueConfetti)
 
 export default {
   name: 'App',
@@ -30,12 +39,14 @@ export default {
     RingSlot,
     InfoDisplay,
     StartForm,
+    WinScreen,
   },
   data() {
     return {
       name: '',
-      timer: '20:22',
+      time: [0, '00:00'],
       moves: 0,
+      started: false,
       selected: null,
       previousClick: 'slot2',
       slot0: [],
@@ -53,42 +64,42 @@ export default {
             color: 'green',
             selected: false,
           },
-          {
-            id: 2,
-            width: '450%',
-            color: 'blue',
-            selected: false,
-          },
-          {
-            id: 3,
-            width: '600%',
-            color: 'orange',
-            selected: false,
-          },
-          {
-            id: 4,
-            width: '750%',
-            color: 'magenta',
-            selected: false,
-          },
-          {
-            id: 5,
-            width: '900%',
-            color: 'cyan',
-            selected: false,
-          },
-          {
-            id: 6,
-            width: '1050%',
-            color: 'black',
-            selected: false,
-          },
-          {
-            id: 7,
-            width: '1200%',
-            color: 'pink',
-            selected: false,
-          },
+          // {
+          //   id: 2,
+          //   width: '450%',
+          //   color: 'blue',
+          //   selected: false,
+          // },
+          // {
+          //   id: 3,
+          //   width: '600%',
+          //   color: 'orange',
+          //   selected: false,
+          // },
+          // {
+          //   id: 4,
+          //   width: '750%',
+          //   color: 'magenta',
+          //   selected: false,
+          // },
+          // {
+          //   id: 5,
+          //   width: '900%',
+          //   color: 'cyan',
+          //   selected: false,
+          // },
+          // {
+          //   id: 6,
+          //   width: '1050%',
+          //   color: 'black',
+          //   selected: false,
+          // },
+          // {
+          //   id: 7,
+          //   width: '1200%',
+          //   color: 'pink',
+          //   selected: false,
+          // },
   ]
 }
   },
@@ -122,6 +133,12 @@ export default {
                 this[slotClicked][0].selected = true;
                 this.previousClick = slotClicked;
             }
+
+            if(this.slot0.length === 2) {
+              // won the game logic
+              clearInterval(window.timerInterval)
+              this.$confetti.start();
+            }
         },
         handleRingTransfer(slotClicked) {
           this[slotClicked].unshift(this.selected);
@@ -129,14 +146,25 @@ export default {
           this[this.previousClick].shift();
           this.selected = null;
           this.previousClick = slotClicked; 
+          this.moves++
     },
-      onNameChange: function(newValue) {
-        this.name = newValue;
-      },
-      onGameStart: function(started) {
-        console.log(started);
-        setInterval()
-      }
+        timer: function() {
+          let newTime = this.time[0] + 1;
+          let minutes = Math.floor(newTime / 60);
+          let seconds = newTime % 60;
+
+          if(seconds < 10) seconds = `0${seconds}`
+
+          this.time = [newTime, `${minutes}:${seconds}`];
+        },
+        onNameChange: function(newValue) {
+          this.name = newValue;
+        },
+        onGameStart: function(started) {
+          this.started = started;
+           window.timerInterval = setInterval(this.timer, 1000);
+
+        }
   },
 }
 </script>
@@ -167,18 +195,17 @@ export default {
 
   }
 
-  /* #app::after {
-    content: '';
+   .background {
     width: 100vw;
     height: 100vh;
 
-
+    z-index: 3;
     position: fixed;
     top: 0;
     left: 0;
     opacity: .9;
     background-color: black;
-  } */
+  } 
 
 
   .slotsWrapper {
@@ -220,6 +247,14 @@ export default {
   .handleClickArea {
     width: 30vw;
     height: 100%;
+  }
+
+  .fade-leave-active {
+    transition: opacity .5s;
+  }
+
+  .fade-leave-to {
+    opacity: 0;
   }
 
 

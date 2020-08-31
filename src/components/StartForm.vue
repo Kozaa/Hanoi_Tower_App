@@ -1,29 +1,35 @@
 <template>
 <transition name='fade'>
-  <div class='formWrapper' v-if="showForm">
-        <label for='name'>Type in your name:</label>
-        <input name='name' type="text" v-model='newName'>
+  <div class='formWrapper' v-show="showForm">
+    <label for='name'>Type in your name:</label>
+    <input name='name' type="text" v-model='newName'>
 
-      <Button type='Start' v-on:click.native='handleGameStart'/> 
-      <Button type='Rules' id='2'/> 
+    <Button type='Start' v-on:click.native='handleGameStart'/> 
+    <Button type='Rules' id='2' @click.native="showRules = !showRules" /> 
+    <Rules v-show='showRules'/>
   </div>
 </transition>
 </template>
 
 <script>
 import Button from './Button.vue'; 
+import Rules from './Rules.vue';
 
 export default {
     name: 'StartForm',
     components: {
         Button,
+        Rules
     },
     props: {
-
+        name: {
+            required: false,
+        },
     },
     data() {
         return {
             showForm: true,
+            showRules: false,
         }
     },
     computed: {
@@ -32,14 +38,20 @@ export default {
             this.$emit('nameChange', newVal)
       },
       get() {
-        return this.value
+        return this.name;
       },
     },
   },
     methods: {
         handleGameStart: function() {
-            this.showForm = false;
-            this.$emit('gameStart', true);
+
+            if(this.newName) {
+
+                this.showForm = false;
+                this.showRules = false;
+                this.$emit('gameStart', true);
+
+            } else alert('please enter a valid name');
 
         }
     }
@@ -51,7 +63,7 @@ export default {
 
     .formWrapper {
         position: fixed;
-        top: 50%;
+        top: 45%;
         left: 50%;
         transform: translateX(-50%) translateY(-70%);
 
@@ -61,7 +73,7 @@ export default {
         grid-template-rows: 1fr 1fr 1fr;
         align-items: center;
         justify-items: center;
-        z-index: 1;
+        z-index: 4;
         
         background-color: seashell;
         border-radius: 15px;
@@ -85,11 +97,10 @@ export default {
         margin-top: 10px;
     }
 
-    .fade-leave-active {
+    .fade-enter-active, .fade-leave-active {
         transition: opacity .5s;
     }
-
-    .fade-leave-to {
+    .fade-enter, .fade-leave-to {
         opacity: 0;
     }
 

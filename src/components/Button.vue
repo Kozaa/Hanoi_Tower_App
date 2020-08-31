@@ -1,15 +1,15 @@
 <template>
-  <button class='button' @click='showRules=!showRules'>
+<div>
+  <button class='button'>
       {{ type }}
-      <transition name='fade'>
-      <div class='rulesWrapper' v-if='showRules'>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos assumenda consequuntur sequi nobis voluptas. Neque, cumque quibusdam? Quae, natus excepturi laboriosam, nihil odit, numquam ea molestias repellendus praesentium earum nisi!
-      </div>
-      </transition>
   </button>
+
+  </div>
 </template>
 
 <script>
+
+
 export default {
     name: 'Button',
     props: {
@@ -17,14 +17,6 @@ export default {
             required: true,
         }
     },
-    data() {
-        return {
-            showRules: false,
-        }
-    },
-    methods: {
-
-    }
 }
 </script>
 
@@ -50,22 +42,4 @@ export default {
         cursor: pointer;
     }
 
-    .rulesWrapper {
-        position: absolute;
-        top:100%;
-        width: 50vw;
-        left: 50%;
-        transform: translateX(-50%);
-
-        background-color: azure;
-        padding: 25px;
-        border-radius: 15px;
-    }
-
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;  
-    }
-    .fade-enter, .fade-leave-to {
-        opacity: 0;
-    }
 </style>
