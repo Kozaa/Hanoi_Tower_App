@@ -5,7 +5,7 @@
     </transition>
     <StartForm @nameChange='onNameChange' :name='name' @gameStart='onGameStart'/>
     <InfoDisplay :name='name' :moves='moves' :time='time'/>
-    <WinScreen />
+    <WinScreen :name='name' :moves='moves' :time='time'/>
     <div class='slotsWrapper'>
         <RingSlot :rings='slot0'/>
         
@@ -43,9 +43,9 @@ export default {
   },
   data() {
     return {
-      name: '',
-      time: [0, '00:00'],
-      moves: 0,
+      name: 'myname',
+      time: [14, '23:00'],
+      moves: 4,
       started: false,
       selected: null,
       previousClick: 'slot2',
