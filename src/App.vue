@@ -1,11 +1,11 @@
 <template>
   <div id="app" >
-    <transition name='fade'>
-      <div class='background' v-show='!started'/>
-    </transition>
+    <transition-group name='fade'>
+      <div key='1' class='background' v-show='!started'/>
+    <WinScreen key='2' v-show='won' :name='name' :moves='moves' :time='time'/>
+    </transition-group>
     <StartForm @nameChange='onNameChange' :name='name' @gameStart='onGameStart'/>
     <InfoDisplay :name='name' :moves='moves' :time='time'/>
-    <WinScreen :name='name' :moves='moves' :time='time'/>
     <div class='slotsWrapper'>
         <RingSlot :rings='slot0'/>
         
@@ -43,10 +43,11 @@ export default {
   },
   data() {
     return {
-      name: 'myname',
-      time: [14, '23:00'],
-      moves: 4,
+      name: '',
+      time: [0, '00:00'],
+      moves: 0,
       started: false,
+      won: false,
       selected: null,
       previousClick: 'slot2',
       slot0: [],
@@ -64,42 +65,30 @@ export default {
             color: 'green',
             selected: false,
           },
-          // {
-          //   id: 2,
-          //   width: '450%',
-          //   color: 'blue',
-          //   selected: false,
-          // },
-          // {
-          //   id: 3,
-          //   width: '600%',
-          //   color: 'orange',
-          //   selected: false,
-          // },
-          // {
-          //   id: 4,
-          //   width: '750%',
-          //   color: 'magenta',
-          //   selected: false,
-          // },
-          // {
-          //   id: 5,
-          //   width: '900%',
-          //   color: 'cyan',
-          //   selected: false,
-          // },
-          // {
-          //   id: 6,
-          //   width: '1050%',
-          //   color: 'black',
-          //   selected: false,
-          // },
-          // {
-          //   id: 7,
-          //   width: '1200%',
-          //   color: 'pink',
-          //   selected: false,
-          // },
+          {
+            id: 2,
+            width: '450%',
+            color: 'blue',
+            selected: false,
+          },
+          {
+            id: 3,
+            width: '600%',
+            color: 'orange',
+            selected: false,
+          },
+          {
+            id: 4,
+            width: '750%',
+            color: 'magenta',
+            selected: false,
+          },
+          {
+            id: 5,
+            width: '900%',
+            color: 'cyan',
+            selected: false,
+          },
   ]
 }
   },
@@ -134,10 +123,11 @@ export default {
                 this.previousClick = slotClicked;
             }
 
-            if(this.slot0.length === 2) {
+            if(this.slot0.length === 6) {
               // won the game logic
               clearInterval(window.timerInterval)
               this.$confetti.start();
+              this.won = true;
             }
         },
         handleRingTransfer(slotClicked) {

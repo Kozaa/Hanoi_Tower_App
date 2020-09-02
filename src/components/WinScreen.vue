@@ -13,25 +13,29 @@
                         
                         <span>Place</span>
                         <span>Name</span>
-                        <span>Time</span>
-                        <span>Moves</span>
+                        <span class='clickable' @click="sortBy='time'">Time</span>
+                        <span class='clickable' @click="sortBy='moves'">Moves</span>
                     </div>
                     <div class='leaderboardGrid'>
-                        <template v-for='(user, i) in documents'>
-                            <span v-bind:key='i'>{{i+1}}</span>
-                            <span v-bind:key='i'>{{user.name}}</span>
-                            <span v-bind:key='i'>{{user.time[1]}}</span>
-                            <span v-bind:key='i'>{{user.time[0]}}</span>
+                        <template v-for="(user, i) in sorted">
+                            <span v-bind:key="user['.key'].slice(1, user['.key'].length)">{{i+1}}</span>
+                            <span v-bind:key="user['.key'].slice(1, user['.key'].length - 1)">{{user.name}}</span>
+                            <span v-bind:key="user['.key'].slice(1, user['.key'].length - 2)">{{user.time[1]}}</span>
+                            <span v-bind:key="user['.key'].slice(1, user['.key'].length - 3)">{{user.moves}}</span>
                         </template>
                     </div>
                     
                 </div>
             </div>
-            <div class='submitWrapper'>
+            <div class='submitWrapper' v-show='!chosen'>
                 Would you like to submit your score?
-                <Button type='Yes' @click.native='submitUser'>Yes</Button>
-                <Button type='No'>No</Button>
-
+                <Button type='Yes' @click.native.once='submitUser'>Yes</Button>
+                <Button type='No' @click.native='chosen = !chosen'>No</Button>
+            </div>
+            <div class='submitWrapper' v-show='chosen'>
+                <h3 v-show='added'>Your score has been added!</h3>
+                <h3 v-show='!added'>Thanks for playing!</h3>
+                <Button type='Restart' @click.native='restart'>No</Button>
             </div>
 
 
@@ -47,7 +51,10 @@ export default {
     name: 'WinScreen',
     data() {
         return {
-          documents: [],  
+          documents: [], 
+          sortBy: 'time',
+          chosen: false,
+          added: false, 
         }
     },
     components: {
@@ -66,22 +73,30 @@ export default {
     },
     methods: {
         submitUser: function() {
-            leaderboard.push({'name': 'John', 'time': [20 ,'20:20']})
-            setTimeout(() => {
-                console.log(this.documents)
-            }, 3000);
+            leaderboard.push({'name': this.name, 'time': this.time, 'moves': this.moves});
+            this.added = !this.added;
+            this.chosen = !this.chosen;
+        },
+        restart: function() {
+            window.location.reload();
         }
     },
       firebase: {
         documents: leaderboard
   },
-  watched: {
-      documents: function(oldDocuments, newDocuments) {       // <-- trying to display something when database is empty
-          if(oldDocuments) {
-              return newDocuments
-          } else this.documents = [{'name': 'N/A', 'time': 'N/A', 'moves': 'N/A' }]
+  computed: {
+      sorted: function() {       
+          if(this.documents.length !== 0) {
+              let sortedDocuments = this.documents;
+
+                switch(this.sortBy) {
+                    case 'time': return sortedDocuments.sort((a,b) => a.time[0] - b.time[0]);
+                    case 'moves': return sortedDocuments.sort((a,b) => a.moves - b.moves);
+                    default: return [{'name': 'N/A', 'time': [0, 'N/A'], 'moves': 'N/A', '.key': 'aDKe302D30' }];
+                }
+          } else return [{'name': 'N/A', 'time': [0, 'N/A'], 'moves': 'N/A', '.key': 'aDKe302D30' }]
       }
-  }
+  },
 }
 </script>
 
@@ -99,6 +114,7 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        align-items: center;
         text-align: center;
         background-color: seashell;
         border-radius: 15px;
@@ -111,15 +127,16 @@ export default {
         
         display: flex;
         justify-content: space-around;
+
+        border-bottom: black 1px solid;
     }
 
     .submitWrapper {
         height: 20%;
-        width: 100%;
+        width: 50%;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         align-items: center;
-        border-top: black 1px solid;
     }
 
     h1 {
@@ -146,12 +163,13 @@ export default {
     .topWrapper {
         width: 40%;
         padding: 20px;
-        height: 80%;
+        height: 100%;
        
     }
 
     .topDisplayGrid {
         display: grid;
+        min-height: 40%;
         
         grid-template-columns: 1fr 2fr 1fr 1fr;
         grid-template-rows: 4fr 1fr;
@@ -164,15 +182,17 @@ export default {
     .leaderboardGrid {
         display: grid;
         height: auto;
-        max-height: 50%;
+        max-height: 60%;
         width: calc(100% + 15px);
         grid-template-columns: 1fr 2fr 1fr 1fr;
         grid-auto-rows: 1fr;
 
         overflow-y: scroll;
         overflow-x: hidden;
+    }
 
-
+    .clickable {
+        cursor: pointer;
     }
 
 </style>
