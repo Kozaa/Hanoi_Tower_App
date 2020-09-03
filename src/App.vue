@@ -1,11 +1,17 @@
 <template>
   <div id="app" >
+    
     <transition-group name='fade'>
-      <div key='1' class='background' v-show='!started'/>
+    <div key='1' class='background' v-show='!started'/>
     <WinScreen key='2' v-show='won' :name='name' :moves='moves' :time='time'/>
     </transition-group>
+
     <StartForm @nameChange='onNameChange' :name='name' @gameStart='onGameStart'/>
+
     <InfoDisplay :name='name' :moves='moves' :time='time'/>
+
+    <div class='illigal' v-show='illigal'>ILLEGAL MOVE</div>
+
     <div class='slotsWrapper'>
         <RingSlot :rings='slot0'/>
         
@@ -49,43 +55,44 @@ export default {
       started: false,
       won: false,
       selected: null,
+      illigal: false,
       previousClick: 'slot2',
       slot0: [],
       slot1: [],
       slot2: [
           {
             id: 0,
-            width: '150%',
+            width: '300%',
             color: 'red',
             selected: false,
           },
           {
             id: 1,
-            width: '300%',
+            width: '450%',
             color: 'green',
             selected: false,
           },
           {
             id: 2,
-            width: '450%',
+            width: '600%',
             color: 'blue',
             selected: false,
           },
           {
             id: 3,
-            width: '600%',
+            width: '750%',
             color: 'orange',
             selected: false,
           },
           {
             id: 4,
-            width: '750%',
+            width: '900%',
             color: 'magenta',
             selected: false,
           },
           {
             id: 5,
-            width: '900%',
+            width: '1050%',
             color: 'cyan',
             selected: false,
           },
@@ -110,7 +117,12 @@ export default {
 
                         this.handleRingTransfer(slotClicked);
 
-                      } else alert('sorry, illegal move');
+                      } else {
+                          this.illigal = true;
+                          setTimeout(() => {
+                              this.illigal = false;
+                          }, 250);
+                      }
                   } else this.handleRingTransfer(slotClicked);   
               }
             } 
@@ -136,7 +148,7 @@ export default {
           this[this.previousClick].shift();
           this.selected = null;
           this.previousClick = slotClicked; 
-          this.moves++
+          this.moves++;
     },
         timer: function() {
           let newTime = this.time[0] + 1;
@@ -193,10 +205,22 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
+    
     opacity: .9;
     background-color: black;
   } 
 
+  .illigal {
+    width: 100vw;
+
+    position: fixed;
+    top: 20%;
+
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: red;
+  }
 
   .slotsWrapper {
     width: 90%;
@@ -229,6 +253,7 @@ export default {
   .handleClickWrapper {
     width: 100%;
     height: 100%;
+
     position: absolute;
     display: flex;
     flex-direction: row;

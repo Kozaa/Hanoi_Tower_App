@@ -4,8 +4,8 @@
             <div class='upperWrapper'>
                 <div class='congratulationWrapper'>
                     <h1>Congratulations <br> {{name}}!</h1>
-                    <h2>Your Time: <br> {{time[1]}} </h2>
-                    <h2>Your Moves: <br> {{moves}} </h2>
+                    <h2>Your <br v-show="mobile"> Time: <br> {{time[1]}} </h2>
+                    <h2>Your <br v-show="mobile"> Moves: <br> {{moves}} </h2>
                 </div>
                 <div class='topWrapper'>
                     <div class='topDisplayGrid'>
@@ -95,6 +95,9 @@ export default {
                     default: return [{'name': 'N/A', 'time': [0, 'N/A'], 'moves': 'N/A', '.key': 'aDKe302D30' }];
                 }
           } else return [{'name': 'N/A', 'time': [0, 'N/A'], 'moves': 'N/A', '.key': 'aDKe302D30' }]
+      },
+      mobile: function() {
+         return window.innerWidth > 768 ?  false : true;
       }
   },
 }
@@ -118,6 +121,7 @@ export default {
         text-align: center;
         background-color: seashell;
         border-radius: 15px;
+        border: 1px black solid;
         
     }
 
@@ -134,29 +138,29 @@ export default {
     .submitWrapper {
         height: 20%;
         width: 50%;
+        padding: 20px 0;
         display: flex;
         justify-content: space-around;
         align-items: center;
+    }
+
+    h1, h2, h3 {
+        margin: 0;
     }
 
     h1 {
         grid-column: 1/5;
     }
 
-    .grid-row {
-        display: flex;
-        justify-content: space-between;
-        margin: 0;
-        padding: 0;
-    } 
-
     .congratulationWrapper {
         width: 60%;
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
+        align-content: center;
+        justify-content: center;
         
-        
+        padding-top: 20px;
         border-right: black solid 1px;
     }
 
@@ -169,10 +173,10 @@ export default {
 
     .topDisplayGrid {
         display: grid;
-        min-height: 40%;
+        /* min-height: 40%; */
         
         grid-template-columns: 1fr 2fr 1fr 1fr;
-        grid-template-rows: 4fr 1fr;
+        grid-template-rows: 3fr 1fr;
         grid-auto-rows: 1fr;
         grid-auto-flow: row;
         grid-row-gap: 5px;
@@ -193,6 +197,54 @@ export default {
 
     .clickable {
         cursor: pointer;
+    }
+
+    @media screen and (max-width: 768px) {
+        .wrapper {
+            height: auto;
+            max-height: 95vh;
+            width: 90vw;
+            padding: 10px;
+        }
+
+        .upperWrapper {
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+
+        }
+
+        .topWrapper {
+            height: 30%;
+            width: 100%;
+        }
+
+        .topDisplayGrid {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-rows: 2fr 1fr;
+        }
+
+        .leaderboardGrid {
+            max-height: 10vh;
+            width: 100%;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+
+        .congratulationWrapper {
+            width: 100%;
+            border-right: none;
+            border-bottom: solid black 1px;
+            height: 30%;
+        }
+
+        .submitWrapper {
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 1.8em;
+        }
+
     }
 
 </style>

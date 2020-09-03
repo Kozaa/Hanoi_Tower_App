@@ -65,7 +65,7 @@ export default {
         position: fixed;
         top: 45%;
         left: 50%;
-        transform: translateX(-50%) translateY(-70%);
+        transform: translateX(-50%) translateY(-60%);
 
         display: grid;
         grid-gap: 10px;

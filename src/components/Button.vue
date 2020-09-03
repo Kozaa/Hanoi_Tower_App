@@ -1,10 +1,7 @@
 <template>
-<div>
   <button class='button'>
       {{ type }}
   </button>
-
-  </div>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
     <transition name='fade'>
       <div class='rulesWrapper'>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dignissimos assumenda consequuntur sequi nobis voluptas. Neque, cumque quibusdam? Quae, natus excepturi laboriosam, nihil odit, numquam ea molestias repellendus praesentium earum nisi!
+          The objective of the puzzle is to move the stack of discs to the left peg. Only one disk can be moved at a time. You can only place smaller disc on top of the bigger one. The smallest possible number of moves required to solve the tower of 6 discs is 63. Good luck!
       </div>
     </transition>
 </template>
@@ -15,12 +15,12 @@ export default {
 <style>
     .rulesWrapper {
         position: absolute;
-        top:110%;
+        top:105%;
         width: 50vw;
         left: 50%;
         transform: translateX(-50%);
         
-
+        text-align: justify;
         z-index: 5;
         background-color: azure;
         padding: 25px;
@@ -32,5 +32,11 @@ export default {
     }
     .fade-enter, .fade-leave-to {
         opacity: 0;
+    }
+
+    @media screen and (max-width: 768px) {
+        .rulesWrapper {
+            width: 95vw;
+        }
     }
 </style>
