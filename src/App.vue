@@ -3,7 +3,7 @@
     
     <transition-group name='fade'>
     <div key='1' class='background' v-show='!started'/>
-    <WinScreen key='2' v-show='won' :name='name' :moves='moves' :time='time'/>
+    <WinScreen key='2' v-if='won' :name='name' :moves='moves' :time='time'/>
     </transition-group>
 
     <StartForm @nameChange='onNameChange' :name='name' @gameStart='onGameStart'/>
