@@ -4,28 +4,10 @@
             <div class='upperWrapper'>
                 <div class='congratulationWrapper'>
                     <h1>Congratulations <br> {{name}}!</h1>
-                    <h2>Your <br v-show="mobile"> Time: <br> {{time[1]}} </h2>
-                    <h2>Your <br v-show="mobile"> Moves: <br> {{moves}} </h2>
+                    <h2>Your Time: <br> {{time[1]}} </h2>
+                    <h2>Your Moves: <br> {{moves}} </h2>
                 </div>
-                <div class='topWrapper'>
-                    <div class='topDisplayGrid'>
-                        <h1>TOP</h1>
-                        
-                        <span>Place</span>
-                        <span>Name</span>
-                        <span class='clickable' @click="sortBy='time'">Time</span>
-                        <span class='clickable' @click="sortBy='moves'">Moves</span>
-                    </div>
-                    <div class='leaderboardGrid'>
-                        <template v-for="(user, i) in sorted">
-                            <span v-bind:key="user['.key'].slice(1, user['.key'].length)">{{i+1}}</span>
-                            <span v-bind:key="user['.key'].slice(1, user['.key'].length - 1)">{{user.name}}</span>
-                            <span v-bind:key="user['.key'].slice(1, user['.key'].length - 2)">{{user.time[1]}}</span>
-                            <span v-bind:key="user['.key'].slice(1, user['.key'].length - 3)">{{user.moves}}</span>
-                        </template>
-                    </div>
-                    
-                </div>
+                <Leaderboard :maxHeight='true'/>
             </div>
             <div class='submitWrapper' v-show='!chosen'>
                 Would you like to submit your score?
@@ -46,19 +28,19 @@
 <script>
 import { leaderboard } from '../firebase';
 import Button from './Button.vue';
+import Leaderboard from './Leaderboard.vue';
 
 export default {
     name: 'WinScreen',
     data() {
         return {
-          documents: [], 
-          sortBy: 'time',
           chosen: false,
           added: false, 
         }
     },
     components: {
         Button,
+        Leaderboard,
     },
     props: {
         name: {
@@ -81,26 +63,8 @@ export default {
             window.location.reload();
         }
     },
-      firebase: {
-        documents: leaderboard
-  },
-  computed: {
-      sorted: function() {       
-          if(this.documents.length !== 0) {
-              let sortedDocuments = this.documents;
+  }
 
-                switch(this.sortBy) {
-                    case 'time': return sortedDocuments.sort((a,b) => a.time[0] - b.time[0]);
-                    case 'moves': return sortedDocuments.sort((a,b) => a.moves - b.moves);
-                    default: return [{'name': 'N/A', 'time': [0, 'N/A'], 'moves': 'N/A', '.key': 'aDKe302D30' }];
-                }
-          } else return [{'name': 'N/A', 'time': [0, 'N/A'], 'moves': 'N/A', '.key': 'aDKe302D30' }]
-      },
-      mobile: function() {
-         return window.innerWidth > 768 ?  false : true;
-      }
-  },
-}
 </script>
 
 <style>
@@ -153,7 +117,7 @@ export default {
     }
 
     .congratulationWrapper {
-        width: 60%;
+        width: 50%;
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
@@ -164,41 +128,7 @@ export default {
         border-right: black solid 1px;
     }
 
-    .topWrapper {
-        width: 40%;
-        padding: 20px;
-        height: 100%;
-       
-    }
-
-    .topDisplayGrid {
-        display: grid;
-        /* min-height: 40%; */
-        
-        grid-template-columns: 1fr 2fr 1fr 1fr;
-        grid-template-rows: 3fr 1fr;
-        grid-auto-rows: 1fr;
-        grid-auto-flow: row;
-        grid-row-gap: 5px;
-
-    }
-
-    .leaderboardGrid {
-        display: grid;
-        height: auto;
-        max-height: 60%;
-        width: calc(100% + 15px);
-        grid-template-columns: 1fr 2fr 1fr 1fr;
-        grid-auto-rows: 1fr;
-
-        overflow-y: scroll;
-        overflow-x: hidden;
-    }
-
-    .clickable {
-        cursor: pointer;
-    }
-
+    
     @media screen and (max-width: 768px) {
         .wrapper {
             height: auto;
@@ -212,22 +142,6 @@ export default {
             justify-content: space-around;
             align-items: center;
 
-        }
-
-        .topWrapper {
-            height: 30%;
-            width: 100%;
-        }
-
-        .topDisplayGrid {
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            grid-template-rows: 2fr 1fr;
-        }
-
-        .leaderboardGrid {
-            max-height: 10vh;
-            width: 100%;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
         }
 
         .congratulationWrapper {

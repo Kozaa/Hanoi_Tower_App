@@ -5,7 +5,7 @@
     <input name='name' type="text" v-model='newName'>
 
     <Button type='Start' v-on:click.native='handleGameStart'/> 
-    <Button type='Rules' id='2' @click.native="showRules = !showRules" /> 
+    <Button type='Rules' @click.native="showRules = !showRules" /> 
     <Rules v-show='showRules'/>
   </div>
 </transition>
@@ -45,13 +45,12 @@ export default {
     methods: {
         handleGameStart: function() {
 
-            if(this.newName) {
-
+            if(0 < this.newName.trim().length && this.newName.trim().length < 10) {
                 this.showForm = false;
                 this.showRules = false;
                 this.$emit('gameStart', true);
 
-            } else alert('please enter a valid name');
+            } else alert('Please enter a valid name. 1-10 characters');
 
         }
     }

@@ -1,24 +1,10 @@
-# firts_vue_app
+# Hanoi Tower App
 
-## Project setup
-```
-npm install
-```
+## Live at:
+https://hanoitowerapp.netlify.app/
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+#### Technologies: Vue.js, Firebase
+#### Additolnal packages: [VueConfetti](https://www.npmjs.com/package/vue-confetti)
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Description
+##### Game based on the puzzle known as Hanoi Tower written in Vue.js with a connection to Real Time Data Base from Firebase to store the leaderboard of the players.
